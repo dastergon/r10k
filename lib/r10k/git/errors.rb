@@ -10,24 +10,24 @@ module R10K
       attr_reader :ref
       attr_reader :git_dir
 
-      def initialize(*args)
+      def initialize(mesg, options = {})
+        if mesg.is_a? Hash
+          options = mesg
+          mesg    = nil
+        end
         super
-
-        @hash    = @options[:ref]
+        @ref     = @options[:ref]
         @git_dir = @options[:git_dir]
       end
 
-      HASHLIKE = %r[[A-Fa-f0-9]]
-
-      # Print a friendly error message if an object hash is given as the message
       def message
         if @mesg
           msg = @mesg
         else
-          msg = "Could not locate hash"
+          msg = "Could not resolve Git reference"
 
-          if @hash
-            msg << " '#{@hash}'"
+          if @ref
+            msg << " '#{@ref}'"
           end
         end
 
